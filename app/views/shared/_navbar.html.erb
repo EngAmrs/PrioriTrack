@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container">
+    <%= link_to "PrioriTrack", root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link active", "aria-current" => "page" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Web App", root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "About", root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Contact", root_path, class: "nav-link" %>
+        </li>
+      </ul>
+      <div class="d-flex">
+        <%= button_to "Sign Up", new_user_registration_path, method: :get, class: "btn btn-outline-success" %>
+        <%= button_to "Login", new_user_session_path, method: :get, class: "btn btn-outline-success" %>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<style>
+  /* Custom Styles */
+  .navbar {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0
+  }
+
+  .navbar-brand {
+    color: #333;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .nav-link {
+    color: #333;
+    font-size: 16px;
+  }
+
+  .btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
+  }
+  .btn{
+    margin-right: 1em
+  }
+</style>
