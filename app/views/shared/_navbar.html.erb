@@ -13,15 +13,18 @@
           <%= link_to "Web App", root_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
-          <%= link_to "About", root_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "Contact", root_path, class: "nav-link" %>
+          <%= link_to "About Us", root_path, class: "nav-link" %>
         </li>
       </ul>
       <div class="d-flex">
+        <% if !user_signed_in? %>
         <%= button_to "Sign Up", new_user_registration_path, method: :get, class: "btn btn-outline-success" %>
         <%= button_to "Login", new_user_session_path, method: :get, class: "btn btn-outline-success" %>
+        <% end %>
+        <% if user_signed_in? %>
+            <img style="border: 1px solid #ccc; border-radius: 50%; padding: 5px" width="50" height="50" src="https://cdn-icons-png.flaticon.com/512/6386/6386976.png">
+            <%= button_to "log out", destroy_user_session_path, method: :delete, class: "logout btn btn-outline-success" %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -53,5 +56,9 @@
   }
   .btn{
     margin-right: 1em
+  }
+  .logout{
+    margin-left: 1em;
+    margin-top: 5px
   }
 </style>
