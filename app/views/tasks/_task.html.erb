@@ -1,0 +1,175 @@
+<div id="<%= dom_id task %>">
+  <p>
+    <strong>Name:</strong>
+    <%= task.name %>
+  </p>
+
+  <p>
+    <strong>Startat:</strong>
+    <%= task.startAt.strftime("%I:%M %p") %>
+  </p>
+
+  <p>
+    <strong>Endat:</strong>
+    <%= task.endAt.strftime("%I:%M %p") %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= task.status %>
+  </p>
+
+  <p>
+    <strong>Project:</strong>
+    <%= task.project_id %>
+  </p>
+
+    <button id="start<%= task.id %>" data-task-id="<%= task.id %>">
+      Start time
+    </button>
+    <button id="end<%= task.id %>" data-task-id="<%= task.id %>">
+      End time
+    </button>
+    <span id="timer<%= task.id %>">00:00:00</span>
+</div>
+
+<script>
+  var intervalId<%= task.id %>;
+  var startAt = Date.now()
+  var seconds<%= task.id %> = <%= task.seconds %>
+
+  var kickOff = (taskId, taskSeconds)=>{
+        hour = Math.floor(taskSeconds / 3600);
+        hour = hour < 10  ? "0" + hour  : hour
+
+        minute = Math.floor((taskSeconds - hour * 3600) / 60);
+        minute = minute < 10  ? "0" + minute  : minute
+
+        updSecond = taskSeconds - (hour * 3600 + minute * 60);
+        updSecond = updSecond < 10  ? "0" + updSecond  : updSecond
+
+      document.getElementById(`timer${taskId}`).innerHTML = hour + ":" + minute + ":" + updSecond;
+  }
+  kickOff(<%= task.id %>, seconds<%= task.id %>)
+
+
+
+  var startTime = (taskId, taskStatus)=>{
+    // Check if there is a task is running
+    document.addEventListener('DOMContentLoaded', function() {
+    var updateTaskButton = document.getElementById(`start${taskId}`);
+    updateTaskButton.addEventListener('click', function() {
+      if(userTasks(taskId))
+        return
+      // Set the task is running
+      changeStatus(taskId, true);
+
+      // Counting
+      startAt = Date.now()
+      intervalId<%= task.id %> = setInterval(() => {
+        ++seconds<%= task.id %>;
+        kickOff(taskId, seconds<%= task.id %>)
+      }, 1000);
+    });
+    if(taskStatus === true)
+        updateTaskButton.click()
+  });
+  }
+var endTime = (taskId)=>{
+    document.addEventListener('DOMContentLoaded', function() {
+    var updateTaskButton = document.getElementById(`end${taskId}`);
+      
+    updateTaskButton.addEventListener('click', function() {
+      updateTask(taskId, false, seconds<%= task.id %>)
+      clearInterval(intervalId<%= task.id %>);       
+    })
+    })
+
+}
+var changeStatus = (taskId, status)=>{
+      var xhr = new XMLHttpRequest();
+      xhr.open('PATCH', '/tasks/' + taskId);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token.to_s %>');
+      
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          console.log(response);
+        } else {
+          console.error(xhr.statusText);
+        }
+      };
+
+      xhr.onerror = function() {
+        console.error(xhr.statusText);
+      };
+      var data = {
+          task: {
+            status: status,
+          }
+};
+var jsonData = JSON.stringify(data);
+      xhr.send(jsonData);
+}
+
+var userTasks = function (taskId) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/tasks/index_json', false); // Set the third parameter to false to make the request synchronous
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token.to_s %>');
+
+  xhr.send();
+
+  if (xhr.status === 200) {
+    var tasks = JSON.parse(xhr.responseText);
+    // Check if any task has status true
+    var hasActiveTask = tasks.some(function (task) {
+      return task.status === true && task.id !== taskId;
+    });
+
+    return hasActiveTask;
+  } else {
+    console.error(xhr.statusText);
+    return false;
+  }
+};
+
+var updateTask = (taskId, status, time)=>{
+      var xhr = new XMLHttpRequest();
+      xhr.open('PATCH', '/tasks/' + taskId);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token.to_s %>');
+      
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          console.log(response);
+        } else {
+          console.error(xhr.statusText);
+        }
+      };
+
+      xhr.onerror = function() {
+        console.error(xhr.statusText);
+      };
+      var startSeconds = Math.floor(startAt / 1000);
+      var starts = new Date(startSeconds * 1000).toISOString();
+      var endSeconds = Math.floor(Date.now() / 1000);
+      var ends = new Date(endSeconds * 1000).toISOString();
+      var data = {
+          task: {
+            startAt: starts,
+            endAt: ends,
+            status: status,
+            seconds: time
+          }
+};
+var jsonData = JSON.stringify(data);
+      xhr.send(jsonData);
+}
+
+startTime(<%= task.id %>, <%= task.status %>)
+endTime(<%= task.id %>)
+
+</script>

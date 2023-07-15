@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  startAt: 2023-07-14 17:38:45
+  EndAt: 2023-07-14 17:38:45
+  status: false
+  projrct: one
+  user: one
+
+two:
+  name: MyString
+  startAt: 2023-07-14 17:38:45
+  EndAt: 2023-07-14 17:38:45
+  status: false
+  projrct: two
+  user: two

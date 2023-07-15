@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :tasks do
+    collection do
+      get 'index_json'
+    end
+  end
   resources :projects
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
