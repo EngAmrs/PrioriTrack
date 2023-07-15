@@ -4,7 +4,7 @@ class CreateTasks < ActiveRecord::Migration[7.0]
       t.string :name
       t.datetime :startAt, :default => (DateTime.now() + 3.hours)
       t.datetime :endAt, :default => (DateTime.now() + 3.hours)
-      t.boolean :status
+      t.boolean :status, :default => 0
       t.references :projrct, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
 

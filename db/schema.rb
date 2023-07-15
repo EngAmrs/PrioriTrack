@@ -23,9 +23,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_15_074058) do
 
   create_table "tasks", force: :cascade do |t|
     t.string "name"
-    t.datetime "startAt", default: "2023-07-14 21:15:59"
-    t.datetime "endAt", default: "2023-07-14 21:15:59"
-    t.boolean "status"
+    t.datetime "startAt", default: "2023-07-15 17:20:56"
+    t.datetime "endAt", default: "2023-07-15 17:20:56"
+    t.boolean "status", default: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

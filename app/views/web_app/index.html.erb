@@ -1,1 +1,29 @@
-<%= render partial: 'web_app/shared/sidebar' %>
+<div class="row" style="height: 100%">
+  <div class="col-sm-2" >
+    <%= render partial: 'web_app/shared/sidebar' %>
+  </div>
+  <div class="col-sm-10" style="height: 100vh">
+    <div>
+        <%= render partial: 'tasks/form', locals: { task: Task.new } %>
+    </div>
+    <div>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Project</th>
+        <th>Actions</th>
+        <th>Start At</th>
+        <th>End At</th>
+        <th>Timer</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% @tasks.each do |task| %>
+            <%= render partial: 'tasks/task', locals: { task: task } %>
+        <% end %>
+    </tbody>
+  </table>
+    </div>
+  </div>
+</div>
