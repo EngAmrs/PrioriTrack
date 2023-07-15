@@ -18,19 +18,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_15_074058) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["title"], name: "index_projects_on_title", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|
     t.string "name"
-    t.datetime "startAt", default: "2023-07-15 17:20:56"
-    t.datetime "endAt", default: "2023-07-15 17:20:56"
+    t.datetime "startAt"
+    t.datetime "endAt"
     t.boolean "status", default: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "project_id"
     t.integer "seconds", default: 0
+    t.index ["name"], name: "index_tasks_on_name", unique: true
     t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end

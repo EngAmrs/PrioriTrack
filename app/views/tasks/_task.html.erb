@@ -8,9 +8,10 @@
             <button id="start<%= task.id %>" data-task-id="<%= task.id %>" class="btn btn-success">
               Start time
             </button>
-            <button id="end<%= task.id %>" data-task-id="<%= task.id %>" class="btn btn-danger in-active">
+            <button id="end<%= task.id %>" data-task-id="<%= task.id %>" class="btn btn-primary in-active">
               End time
             </button>
+              <%= button_to "Delete", "/tasks/#{task.id}", method: :delete, class: "btn btn-danger" %>            
           </td>
           <td><%= task.startAt.strftime("%I:%M %p") %></td>
           <td><%= task.endAt.strftime("%I:%M %p") %></td>
@@ -25,6 +26,9 @@
 <style>
   .in-active{
     display: none
+  }
+  .button_to{
+    display: inline-block !important
   }
 </style>
 
@@ -75,12 +79,9 @@
         updateTaskButton.click()
 
     }
-
-    
-
-
   });
   }
+
 var endTime = (taskId)=>{
     document.addEventListener('DOMContentLoaded', function() {
     var updateTaskButton = document.getElementById(`end${taskId}`);
@@ -125,7 +126,7 @@ var jsonData = JSON.stringify(data);
 
 var userTasks = function (taskId) {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/tasks/index_json', false); // Set the third parameter to false to make the request synchronous
+  xhr.open('GET', '/tasks/index_json', false);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token.to_s %>');
 
