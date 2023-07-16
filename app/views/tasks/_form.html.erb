@@ -17,7 +17,7 @@
 
     <div class="form-group col-3 row">
       <div div class="col-md">
-      <%= form.collection_select :project_id, Project.all, :id, :title, { prompt: "No Project (Select One)" }, class: "form-control" %>
+      <%= form.collection_select :project_id, current_user.projects, :id, :title, { prompt: "No Project (Select One)" }, class: "form-control" %>
       </div>
       <div div class="col-2">
       <button class="btn btn-dark" id="openModalButton" type="button">+</button>
