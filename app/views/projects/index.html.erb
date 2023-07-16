@@ -1,14 +1,69 @@
-<p style="color: green"><%= notice %></p>
 
-<h1>Projects</h1>
-
-<div id="projects">
-  <% @projects.each do |project| %>
-    <%= render project %>
-    <p>
-      <%= link_to "Show this project", project %>
-    </p>
-  <% end %>
+<div class="row" style="height: 100vh; margin-right: 0 !important">
+    <div class="col-sm-2">
+      <%= render partial: 'web_app/shared/sidebar' %>
+    </div>
+    <div class="col-10 project-list row d-flex justify-content-center">
+      <h1 class="page-title">Projects</h1>
+      <% @projects.each do |project| %>
+        <div class="project-card col-3">
+          <%= render project %>
+          <p class="project-actions">
+            <%= link_to "Show this project", project, class: "project-link" %>
+          </p>
+        </div>
+      <% end %>
+      <div>
+      <%= link_to "New project", new_project_path, class: "new-project-link btn btn-success" %>
+      </div>
+  </div>
 </div>
+  
 
-<%= link_to "New project", new_project_path %>
+
+
+
+<style>
+
+
+.page-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 2em;
+  text-align: center
+}
+
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 20px;
+
+
+  
+}
+
+.project-card {
+  background-color: #f7f7f7;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 25%
+ 
+}
+
+.project-actions {
+  margin-top: 10px;
+  
+}
+
+.project-link {
+  color: #007bff;
+  text-decoration: none;
+  
+}
+.new-project-link{
+  display:table;
+  margin: 0 auto
+}
+
+</style>

@@ -6,10 +6,10 @@
           </td>
           <td>
             <button id="start<%= task.id %>" data-task-id="<%= task.id %>" class="btn btn-success">
-              Start time
+              Start
             </button>
             <button id="end<%= task.id %>" data-task-id="<%= task.id %>" class="btn btn-primary in-active">
-              End time
+              Stop
             </button>
               <%= button_to "Delete", "/tasks/#{task.id}", method: :delete, class: "btn btn-danger" %>            
           </td>

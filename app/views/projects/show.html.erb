@@ -1,10 +1,38 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @project %>
-
-<div>
-  <%= link_to "Edit this project", edit_project_path(@project) %> |
-  <%= link_to "Back to projects", projects_path %>
-
-  <%= button_to "Destroy this project", @project, method: :delete %>
+<div class="notice-container">
+  <p class="notice-text"><%= notice %></p>
 </div>
+
+<div class="project-details">
+  <%= render @project %>
+</div>
+
+<div class="action-buttons ">
+  <%= link_to "Edit this project", edit_project_path(@project), class: "btn btn-primary" %>
+  <%= link_to "Back to projects", projects_path, class: "btn btn-secondary" %>
+  <%= button_to "Destroy this project", @project, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+</div>
+
+
+<style>
+.project-details {
+  background-color: #f7f7f7;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  text-align: center
+}
+
+.action-buttons {
+  margin-bottom: 20px;
+  display: table;
+  margin-right: auto;
+  margin-left:auto
+}
+
+.action-buttons .btn {
+  margin-right: 10px;
+  margin-top: 10px;
+
+}
+</style>
