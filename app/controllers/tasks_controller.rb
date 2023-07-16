@@ -36,14 +36,9 @@ class TasksController < ApplicationController
         format.html { redirect_to webapp_path, notice: "Task was successfully created." }
         format.json { render :show, status: :created, location: @task }
       else
-        format.html { render :new, notice: "Failed to create task." }
+        format.html { redirect_to webapp_path, alert: "Failed to create task." }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
-    end
-  rescue ActiveRecord::RecordNotUnique => e
-    respond_to do |format|
-      format.html { redirect_to webapp_path, notice: "Task title must be unique." }
-      format.json { render json: { error: "Task title must be unique." }, status: :unprocessable_entity }
     end
   end
   
