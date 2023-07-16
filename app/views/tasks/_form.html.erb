@@ -50,16 +50,21 @@
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  $(document).ready(function() {
-    $("#openModalButton").click(function() {
-      $("#myModal").modal("show");
-    });
-    $("#close").click(function() {
-      $("#myModal").modal("hide");
-    });
+  var openModalButton = document.getElementById("openModalButton");
+  var closeModalButton = document.getElementById("close");
+
+  openModalButton.addEventListener("click", function() {
+    var myModal = document.getElementById("myModal");
+    myModal.style.display = "block";
   });
+
+  closeModalButton.addEventListener("click", function() {
+    var myModal = document.getElementById("myModal");
+    myModal.style.display = "none";
+  });
+
+
 </script>
 
 

@@ -85,7 +85,6 @@ var startTime = (taskId, taskStatus)=>{
 }
 
 var endTime = (taskId)=>{
-  document.addEventListener('DOMContentLoaded', function() {
     var updateTaskButton = document.getElementById(`end${taskId}`);
     var startButton = document.getElementById(`start${taskId}`);
       
@@ -96,7 +95,6 @@ var endTime = (taskId)=>{
       clearInterval(intervalId<%= task.id %>);
       location.reload();       
     })
-  })
 }
 
 // Update task with status
