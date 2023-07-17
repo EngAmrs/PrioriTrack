@@ -1,31 +1,225 @@
-<div class="row" style="height: 100%; margin-right: 0 !important">
-  <div class="col-sm-2" >
+<div class="row" style="margin-right: 0 !important">
+  <div class="col-sm-2">
     <%= render partial: 'web_app/shared/sidebar' %>
   </div>
-  <div class="col-sm-10" style="height: 100vh">
+  <div class="col-sm-10">
     <div>
-      
-        <%= render partial: 'tasks/form', locals: { task: Task.new } %>
-        
+      <%= render partial: 'tasks/form', locals: { task: Task.new } %>
     </div>
     <div>
-<table class="table">
-    <thead>
-      <tr>
-        <th>Task</th>
-        <th>Project</th>
-        <th>Actions</th>
-        <th>Last Start At</th>
-        <th>Last End At</th>
-        <th>Timer</th>
-      </tr>
-    </thead>
-    <tbody>
-        <% @tasks.each do |task| %>
-            <%= render partial: 'tasks/task', locals: { task: task } %>
-        <% end %>
-    </tbody>
-  </table>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Project</th>
+            <th>Actions</th>
+            <th>Last Start At</th>
+            <th>Last End At</th>
+            <th>Timer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @tasks.each do |task| %>
+            <tr class="task-row" data-task-id="<%= task.id %>" data-task-status="<%= task.status %>" data-task-seconds="<%= task.seconds %>">
+              <td><%= task.name %></td>
+              <td>
+                <%= Project.find_by(id: task.project_id)&.title || "No project" %>
+              </td>
+              <td>
+                <button id="start<%= task.id %>" class="btn btn-success">
+                  Start
+                </button>
+                <button id="end<%= task.id %>" class="btn btn-primary in-active">
+                  Stop
+                </button>
+                <%= button_to "Delete", "/tasks/#{task.id}", method: :delete, class: "btn btn-danger" %>
+              </td>
+              <td><%= task.startAt.strftime("%I:%M %p") %></td>
+              <td><%= task.endAt.strftime("%I:%M %p") %></td>
+              <td>
+                <span id="timer<%= task.id %>">00:00:00</span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
+
+
+
+
+<script>
+// Global Variables
+var taskElements = document.querySelectorAll('.task-row');
+var startAt = Date.now()
+var intervalId;
+var lastTime;
+
+// Html Timing Format
+var kickOff = function (timerElement, taskSeconds) {
+  var hour = Math.floor(taskSeconds / 3600);
+  hour = hour < 10 ? '0' + hour : hour;
+
+  var minute = Math.floor((taskSeconds - hour * 3600) / 60);
+  minute = minute < 10 ? '0' + minute : minute;
+
+  var updSecond = taskSeconds - (hour * 3600 + minute * 60);
+  updSecond = updSecond < 10 ? '0' + updSecond : updSecond;
+
+  timerElement.innerHTML = hour + ':' + minute + ':' + updSecond;
+};
+
+
+var startTask = function (taskId, taskSeconds, taskStatus) {
+
+  var startButton = document.getElementById('start' + taskId);
+  var endButton = document.getElementById('end' + taskId);
+  var timerElement = document.getElementById('timer' + taskId);
+
+  startButton.addEventListener('click', function () {
+
+    // Check if there is a task running
+    endActiveTasks(lastTime)
+
+    // Set the current task as running
+    this.classList.add('in-active');
+    endButton.classList.remove('in-active');
+    taskElements.forEach(function (taskElement) {
+      if (taskElement.getAttribute('data-task-id') === taskId.toString()) {
+        taskElement.classList.add('running');
+      }
+    });
+
+    // Counting
+
+    changeStatus(taskId, true);
+    startAt = Date.now();
+    intervalId = setInterval(function () {
+    lastTime =  ++taskSeconds;
+    kickOff(timerElement, taskSeconds);
+    }, 1000);
+
+    // Save intervalId in the task element for later use
+    taskElements.forEach(function (taskElement) {
+      if (taskElement.getAttribute('data-task-id') === taskId.toString()) {
+        taskElement.setAttribute('data-interval-id', intervalId);
+      }
+    });
+  });
+
+  // End Task Time
+  var endButton = document.getElementById('end' + taskId);
+  endButton.addEventListener('click', function () {
+    endActiveTasks(lastTime)
+  });
+
+};
+
+  var updateTask = function (taskId, status, time) {
+        var xhr = new XMLHttpRequest();
+      xhr.open('PATCH', '/tasks/' + taskId);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token.to_s %>');
+      
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          console.log(response);
+        } else {
+          console.error(xhr.statusText);
+        }
+      };
+
+      xhr.onerror = function() {
+        console.error(xhr.statusText);
+      };
+      var startSeconds = Math.floor(startAt / 1000);
+      var starts = new Date(startSeconds * 1000).toISOString();
+      var endSeconds = Math.floor(Date.now() / 1000);
+      var ends = new Date(endSeconds * 1000).toISOString();
+      var data = {
+          task: {
+            startAt: starts,
+            endAt: ends,
+            status: status,
+            seconds: time
+          }
+};
+var jsonData = JSON.stringify(data);
+      xhr.send(jsonData);
+  };
+
+
+var endActiveTasks = (lastTime)=>{
+  var runningTasks = document.querySelectorAll('.task-row.running');
+  runningTasks.forEach(function (taskElement) {
+    var runningTaskId = taskElement.getAttribute('data-task-id');
+    var runningTaskEndButton = document.getElementById('end' + runningTaskId);
+    var runningTaskStartButton = document.getElementById('start' + runningTaskId);
+    var runningTaskIntervalId = parseInt(taskElement.getAttribute('data-interval-id'));
+
+    // Stop the running task
+    updateTask(runningTaskId, false, lastTime );
+    clearInterval(runningTaskIntervalId);
+
+    runningTaskEndButton.classList.add('in-active');
+    runningTaskStartButton.classList.remove('in-active');
+
+    taskElement.classList.remove('running');
+  });
+}
+
+
+var changeStatus = (taskId, status) => {
+  fetch('/tasks/' + taskId, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'
+    },
+    body: JSON.stringify({
+      task: {
+        status: status
+      }
+    })
+  })
+    .then(function (response) {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error: ' + response.statusText);
+      }
+    })
+    .then(function (data) {
+      console.log(data);
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+};
+
+
+<style>
+  .in-active{
+    display: none
+  }
+  .button_to{
+    display: inline-block !important
+  }
+</style>
+
+taskElements.forEach(function (taskElement) {
+  var taskId = taskElement.getAttribute('data-task-id');
+  var taskStatus = taskElement.getAttribute('data-task-status');
+  var taskSeconds = parseInt(taskElement.getAttribute('data-task-seconds'));
+
+  // First Start
+  kickOff(document.getElementById('timer' + taskId), taskSeconds);
+  startTask(taskId, taskSeconds, taskStatus);
+  });
+
+</script>
+
+
