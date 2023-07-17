@@ -9,13 +9,13 @@
   <hr>
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-      <a href="/webapp" class="nav-link active" aria-current="page">
+      <a href="/webapp" class="nav-link <%= 'active' if current_page?('/webapp') %> text-white" aria-current="page">
         <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
         Timer
       </a>
     </li>
         <li class="nav-item">
-      <a href="/projects" class="nav-link text-white">
+      <a href="/projects" class="nav-link <%= 'active' if current_page?('/projects') %> text-white">
         <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
         My Projects
       </a>

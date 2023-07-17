@@ -1,4 +1,4 @@
-<div class="row" style="margin-right: 0 !important">
+<div class="row" style="margin-right: 0 !important; min-height: 100vh">
   <div class="col-sm-2">
     <%= render partial: 'web_app/shared/sidebar' %>
   </div>
@@ -32,7 +32,10 @@
                 <button id="end<%= task.id %>" class="btn btn-primary in-active">
                   Stop
                 </button>
-                <%= button_to "Delete", "/tasks/#{task.id}", method: :delete, class: "btn btn-danger" %>
+                <%= button_to "/tasks/#{task.id}", method: :delete, class: "btn btn-danger" do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
+
               </td>
               <td><%= task.startAt.strftime("%I:%M %p") %></td>
               <td><%= task.endAt.strftime("%I:%M %p") %></td>
@@ -48,9 +51,17 @@
 </div>
 
 
-
+<style>
+  .in-active{
+    display: none
+  }
+  .button_to{
+    display: inline-block !important
+  }
+</style>
 
 <script>
+
 // Global Variables
 var taskElements = document.querySelectorAll('.task-row');
 var startAt = Date.now()
@@ -199,16 +210,6 @@ var changeStatus = (taskId, status) => {
       console.error(error);
     });
 };
-
-
-<style>
-  .in-active{
-    display: none
-  }
-  .button_to{
-    display: inline-block !important
-  }
-</style>
 
 taskElements.forEach(function (taskElement) {
   var taskId = taskElement.getAttribute('data-task-id');
