@@ -37,8 +37,8 @@
                 <% end %>
 
               </td>
-              <td><%= task.startAt.strftime("%I:%M %p") %></td>
-              <td><%= task.endAt.strftime("%I:%M %p") %></td>
+              <td id="startAt<%= task.id %>"><%= task.startAt.strftime("%I:%M %p") %></td>
+              <td id="endAt<%= task.id %>"><%= task.endAt.strftime("%I:%M %p") %></td>
               <td>
                 <span id="timer<%= task.id %>">00:00:00</span>
               </td>
@@ -106,7 +106,12 @@ var startTask = function (taskId, taskSeconds, taskStatus) {
     // Counting
 
     changeStatus(taskId, true);
+
+    // Set Start Time
     startAt = Date.now();
+    var startTimeFormatted = new Date(startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('startAt' + taskId).innerHTML = startTimeFormatted;
+
     intervalId = setInterval(function () {
     lastTime =  ++taskSeconds;
     kickOff(timerElement, taskSeconds);
@@ -149,7 +154,10 @@ var startTask = function (taskId, taskSeconds, taskStatus) {
       var startSeconds = Math.floor(startAt / 1000);
       var starts = new Date(startSeconds * 1000).toISOString();
       var endSeconds = Math.floor(Date.now() / 1000);
+
       var ends = new Date(endSeconds * 1000).toISOString();
+      var startTimeFormatted = new Date(ends).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('endAt' + taskId).innerHTML = startTimeFormatted;
       var data = {
           task: {
             startAt: starts,
