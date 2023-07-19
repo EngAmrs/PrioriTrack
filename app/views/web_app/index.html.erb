@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @tasks.each do |task| %>
+         <% @tasks.each do |task| %>
             <tr class="task-row" data-task-id="<%= task.id %>" data-task-status="<%= task.status %>" data-task-seconds="<%= task.seconds %>">
               <td><%= task.name %></td>
               <td>
