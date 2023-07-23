@@ -1,7 +1,7 @@
 class Task < ApplicationRecord
   belongs_to :project, optional: true
   belongs_to :user
-  validates :name, presence: true, length: { minimum: 3 }
+  validates :name, presence: true, length: { minimum: 3, maximum: 50  }
   before_save :add_hours_to_dates
   before_create :initTime
 
