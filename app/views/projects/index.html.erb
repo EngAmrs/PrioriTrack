@@ -1,69 +1,68 @@
-
-<div class="row" style="height: 100vh; margin-right: 0 !important">
+<div class="container-fluid" style="height: 100vh; padding-left: 0">
+  <div class="row">
     <div class="col-sm-2">
       <%= render partial: 'web_app/shared/sidebar' %>
     </div>
-    <div class="col-10 project-list row d-flex justify-content-center">
-      <h1 class="page-title">Projects</h1>
-      <% @projects.each do |project| %>
-        <div class="project-card col-3">
-          <%= render project %>
-          <p class="project-actions">
-            <%= link_to "Show this project", project, class: "project-link" %>
-          </p>
-        </div>
-      <% end %>
-      <div>
-      <%= link_to "New project", new_project_path, class: "new-project-link btn btn-success" %>
+    <div class="col-sm-10">
+      <div class="row mt-4 mb-4">
+        <h1 class="page-title text-left col-10">Projects</h1>
+        <%= link_to "+ New project", new_project_path, class: "btn btn-success btn-block col-1" %>
       </div>
+      <div class="row justify-content-center">
+        <% @projects.each do |project| %>
+          <div class="col-md-4 col-sm-6 col-xs-12 mb-4">
+            <div class="card project-card">
+              <div class="card-body">
+                <%= render project %>
+              </div>
+              <hr>
+              <div class=" text-center row justify-content-center" style="margin-bottom: 1em">
+                <%= link_to "Edit", edit_project_path(project), class: "btn btn-primary col-3" %>
+                <div class="col-3">
+                  <%= button_to "Delete", project, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 
-
-
-
-
 <style>
-
-
+  body{
+    margin: 0;
+    padding: 0
+  }
 .page-title {
   font-size: 24px;
-  margin-bottom: 20px;
-  margin-top: 2em;
-  text-align: center
-}
-
-.project-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 20px;
-
-
-  
 }
 
 .project-card {
-  background-color: #dedede;
-  padding: 10px;
-  border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 25%
- 
+  min-height: 50px;
 }
 
-.project-actions {
-  margin-top: 10px;
-  
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
 }
 
-.project-link {
-  color: #007bff;
-  text-decoration: none;
-  
-}
-.new-project-link{
-  display:table;
-  margin: 0 auto
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
 }
 
+.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #1a682c;
+  border-color: #1a682c;
+}
 </style>
