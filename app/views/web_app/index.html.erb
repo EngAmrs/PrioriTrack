@@ -23,7 +23,11 @@
             <tr class="task-row" data-task-id="<%= task.id %>" data-task-status="<%= task.status %>" data-task-seconds="<%= task.seconds %>">
               <td><%= task.name %></td>
               <td>
-                <%= Project.find_by(id: task.project_id)&.title || "No project" %>
+                <% if task.project %>
+                  <%= task.project.title %>
+                <% else %>
+                   No Project
+                <% end %>
               </td>
               <td>
                 <button id="start<%= task.id %>" class="btn btn-success">

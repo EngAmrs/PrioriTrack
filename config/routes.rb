@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :tasks do
+  resources :tasks, except: [:index, :show, :new] do
     collection do
       get 'index_json'
     end

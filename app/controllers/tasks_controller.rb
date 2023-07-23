@@ -1,29 +1,11 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: %i[ show edit update destroy ]
+  before_action :set_task, only: %i[ update destroy ]
 
-  # GET /tasks or /tasks.json
-  def index
-    @tasks = Task.where(project_id: current_user.projects.pluck(:id)).or(Task.where(project_id: nil, user_id: current_user.id))
-  end
-
+  # GET /tasks.json
   def index_json
-    @tasks = Task.where(project_id: current_user.projects.pluck(:id)).or(Task.where(project_id: nil, user_id: current_user.id))
+    @tasks = Task.includes(:project).where(project_id: current_user.projects.pluck(:id)).or(Task.where(project_id: nil, user_id: current_user.id))
     render json: @tasks 
-  end
-
-  # GET /tasks/1 or /tasks/1.json
-  def show
-  end
-
-  # GET /tasks/new
-  def new
-    @task = Task.new
-  end
-
-  # GET /tasks/1/edit
-  def edit
-
   end
 
   # POST /tasks or /tasks.json
@@ -57,8 +39,6 @@ class TasksController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-
 
   private
     # Use callbacks to share common setup or constraints between actions.
