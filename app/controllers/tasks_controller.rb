@@ -2,12 +2,6 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_task, only: %i[ update destroy ]
 
-  # GET /tasks.json
-  def index_json
-    @tasks = Task.includes(:project).where(project_id: current_user.projects.pluck(:id)).or(Task.where(project_id: nil, user_id: current_user.id))
-    render json: @tasks 
-  end
-
   # POST /tasks or /tasks.json
   def create
     params[:task][:name].strip!

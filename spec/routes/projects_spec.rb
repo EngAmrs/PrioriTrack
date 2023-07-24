@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe "Project Routes", type: :request do
   let(:user) { create(:user) }  
 

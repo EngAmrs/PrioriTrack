@@ -36,11 +36,6 @@ class ProjectsController < ApplicationController
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
-  rescue ActiveRecord::RecordNotUnique => e
-    respond_to do |format|
-      format.html { redirect_to webapp_path, notice: "Project title must be unique." }
-      format.json { render json: { error: "Project title must be unique." }, status: :unprocessable_entity }
-    end
   end
 
   # PATCH/PUT /projects/1 or /projects/1.json
