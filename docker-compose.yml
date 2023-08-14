@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:13.1
+    env_file:
+      - environment.env
+    restart: always
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: "exit 0"
+    volumes:
+      - postgres:/var/lib/postgresql
+
+  backend:
+    image: priori-track
+    build: .
+    entrypoint: ./entrypoint.sh
+    ports:
+      - "5050:3000"
+    volumes:
+      - .:/PrioriTrack
+    depends_on:
+      - db
+    env_file:
+      - environment.env
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Adjust memory as needed
+    ports:
+      - "9200:9200"
+    networks:
+      - prioritrack_network
+    restart: always
+
+volumes:
+  postgres:
+  bundle_path:
+  
+networks:
+  prioritrack_network:
