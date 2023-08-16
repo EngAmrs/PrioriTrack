@@ -5,6 +5,12 @@ class Task < ApplicationRecord
   before_save :add_hours_to_dates
   before_create :initTime
 
+  # ElasticSearch
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+ index_name [Rails.env, base_class.to_s.pluralize.underscore].join('_')
+
+
   private
 
   def add_hours_to_dates

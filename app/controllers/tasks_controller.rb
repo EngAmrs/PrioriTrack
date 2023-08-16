@@ -34,6 +34,14 @@ class TasksController < ApplicationController
     end
   end
 
+  # ElasticSearch
+  def search
+    time_taken = Benchmark.realtime do
+      @tasks = Task.search(query: { wildcard: { name: "#{params[:q]}*" } }).records
+    end
+    puts "Query executed in #{time_taken} seconds."
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task

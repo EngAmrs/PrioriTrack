@@ -12,6 +12,8 @@ services:
       test: "exit 0"
     volumes:
       - postgres:/var/lib/postgresql
+    networks:
+      - prioritrack_network
 
   backend:
     image: priori-track
@@ -25,11 +27,13 @@ services:
       - db
     env_file:
       - environment.env
+    networks:
+      - prioritrack_network
     restart: always
 
-  elasticsearch:
+  elastic:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-    container_name: elasticsearch
+    container_name: elastic 
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Adjust memory as needed
