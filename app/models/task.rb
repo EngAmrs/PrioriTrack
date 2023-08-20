@@ -8,8 +8,8 @@ class Task < ApplicationRecord
   # ElasticSearch
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
- index_name [Rails.env, base_class.to_s.pluralize.underscore].join('_')
-
+  index_name [Rails.env, base_class.to_s.pluralize.underscore].join('_')
+  searchkick text_middle: [:name]
 
   private
 

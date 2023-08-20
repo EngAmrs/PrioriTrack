@@ -9,6 +9,7 @@
       </ul>
     </div>
   <% end %>
+  
   <div class="form-row row mt-5">
     <div class="form-group col-6">
       <%= form.text_field :name, class: "form-control", maxlength: 50 ,placeholder: "What are you working on ?" %>
@@ -30,6 +31,9 @@
   <br/>
   <hr/>
 <% end %>
+
+<%# Search %>
+<%= render partial: 'tasks/search' %>
 
 <div class="modal" id="myModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">

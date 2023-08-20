@@ -16,6 +16,8 @@ gem 'pg'
 # ELasticSearch
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
+gem 'searchkick'
+
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
@@ -29,7 +31,7 @@ gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 
-# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
+# Bundle and process CSS [httfps://github.com/rails/cssbundling-rails]
 gem "cssbundling-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]

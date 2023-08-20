@@ -9,6 +9,7 @@ class TasksController < ApplicationController
   
     respond_to do |format|
       if @task.save
+        @task.reindex
         format.html { redirect_to webapp_path, notice: "Task was successfully created." }
         format.json { render :show, status: :created, location: @task }
       else
@@ -36,10 +37,25 @@ class TasksController < ApplicationController
 
   # ElasticSearch
   def search
-    time_taken = Benchmark.realtime do
-      @tasks = Task.search(query: { wildcard: { name: "#{params[:q]}*" } }).records
-    end
-    puts "Query executed in #{time_taken} seconds."
+    @tasks = Task.search(
+      "#{params[:q]}*",
+      fields: [:name],
+      match: :text_middle,
+      where: {
+        _or: [
+          { project_id: current_user.projects.pluck(:id) },
+          { project_id: nil, user_id: current_user.id }
+        ]
+      },
+      includes: [:project],
+      # load: true 
+    )
+    
+    render turbo_stream:
+      turbo_stream.update('tasks',
+        partial: 'tasks/task',
+        locals: { tasks: @tasks }
+      )
   end
 
   private

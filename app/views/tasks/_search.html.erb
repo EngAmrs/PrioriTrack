@@ -1,0 +1,11 @@
+<%= form_tag(tasks_search_path, method: 'get', class: "test", id: 'search-form') do %>
+  <%= text_field_tag :q, params[:q], placeholder: 'Search tasks...', id: 'search-input' %>
+  <%= submit_tag 'Search', id: 'search-form'%>
+<% end %>
+
+<style>
+.test{
+  margin: 1em 0
+}
+
+</style>
